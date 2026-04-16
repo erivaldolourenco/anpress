@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ site_setting.site_name }}{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}{{ site_setting.site_description|default:'CMS leve e moderno com Django.' }}{% endblock %}">
+  <link rel="stylesheet" href="{% static 'themes/anpress-default/style.css' %}">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-row">
+      <a href="{% url 'home' %}" class="logo">{{ site_setting.site_name }}</a>
+      <nav class="main-nav">
+        <a href="{% url 'home' %}">Home</a>
+        <a href="{% url 'blog:post_list' %}">Blog</a>
+        {% for item in menu_pages %}
+          <a href="{{ item.get_absolute_url }}">{{ item.title }}</a>
+        {% endfor %}
+      </nav>
+      <a href="{% url 'dashboard:login' %}" class="outline-btn">Dashboard</a>
+    </div>
+  </header>
+
+  {% block hero %}{% endblock %}
+
+  <main class="container page-space">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-row">
+      <p>© {% now 'Y' %} {{ site_setting.site_name }}</p>
+      <a href="/robots.txt">robots.txt</a>
+      <a href="/sitemap.xml">sitemap.xml</a>
+    </div>
+  </footer>
+</body>
+</html>

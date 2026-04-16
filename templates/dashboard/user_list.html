@@ -1,0 +1,52 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Usuários{% endblock %}
+
+{% block content %}
+<section class="card">
+  <div class="toolbar">
+    <h1>Usuários</h1>
+    <a href="{% url 'dashboard:user_create' %}" class="btn">Novo usuário</a>
+  </div>
+
+  <form method="get" class="filters">
+    <input type="text" name="q" placeholder="Buscar por nome, usuário ou e-mail" value="{{ q }}">
+    <button type="submit">Buscar</button>
+  </form>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Usuário</th>
+          <th>Nome</th>
+          <th>E-mail</th>
+          <th>Grupos</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user_obj in users %}
+          <tr>
+            <td>{{ user_obj.username }}</td>
+            <td>{{ user_obj.get_full_name|default:'-' }}</td>
+            <td>{{ user_obj.email|default:'-' }}</td>
+            <td>
+              {% for g in user_obj.groups.all %}
+                {{ g.name }}{% if not forloop.last %}, {% endif %}
+              {% empty %}
+                -
+              {% endfor %}
+            </td>
+            <td><a href="{% url 'dashboard:user_update' user_obj.pk %}">Editar</a></td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5">Nenhum usuário encontrado.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% include 'dashboard/pagination.html' with page_obj=page_obj %}
+</section>
+{% endblock %}

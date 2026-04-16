@@ -1,0 +1,15 @@
+{% extends 'anpress-default/base.html' %}
+
+{% block title %}{{ post.meta_title|default:post.title }} | {{ site_setting.site_name }}{% endblock %}
+{% block meta_description %}{{ post.meta_description|default:post.summary|truncatechars:150 }}{% endblock %}
+
+{% block content %}
+<article class="article-card">
+  <small class="meta">{{ post.published_at|date:'d/m/Y H:i' }} • {{ post.author }}</small>
+  <h1>{{ post.title }}</h1>
+  {% if post.featured_image %}
+    <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="hero-image">
+  {% endif %}
+  <div class="rich-content">{{ post.content|linebreaks }}</div>
+</article>
+{% endblock %}

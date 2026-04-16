@@ -1,0 +1,54 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Páginas{% endblock %}
+
+{% block content %}
+<section class="card">
+  <div class="toolbar">
+    <h1>Páginas</h1>
+    <a href="{% url 'dashboard:page_create' %}" class="btn">Nova página</a>
+  </div>
+
+  <form method="get" class="filters">
+    <input type="text" name="q" placeholder="Buscar por título/conteúdo" value="{{ q }}">
+    <select name="status">
+      <option value="">Todos os status</option>
+      <option value="draft" {% if status_filter == 'draft' %}selected{% endif %}>Rascunho</option>
+      <option value="published" {% if status_filter == 'published' %}selected{% endif %}>Publicado</option>
+    </select>
+    <button type="submit">Filtrar</button>
+  </form>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Título</th>
+          <th>Status</th>
+          <th>Menu</th>
+          <th>Autor</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for page in pages %}
+          <tr>
+            <td>{{ page.title }}</td>
+            <td>{{ page.get_status_display }}</td>
+            <td>{% if page.show_in_menu %}Sim{% else %}Não{% endif %}</td>
+            <td>{{ page.author }}</td>
+            <td>
+              <a href="{% url 'dashboard:page_update' page.pk %}">Editar</a>
+              <a href="{% url 'dashboard:page_delete' page.pk %}">Excluir</a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5">Nenhuma página encontrada.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% include 'dashboard/pagination.html' with page_obj=page_obj %}
+</section>
+{% endblock %}

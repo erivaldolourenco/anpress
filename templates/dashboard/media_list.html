@@ -1,0 +1,65 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Mídia{% endblock %}
+
+{% block content %}
+<section class="card">
+  <div class="toolbar media-header">
+    <div class="media-title-wrap">
+      <h1>Biblioteca de mídia</h1>
+      <a href="{% url 'dashboard:post_create' %}" class="media-add-btn">Adicionar nova</a>
+    </div>
+    <span class="media-count">{{ media_items|length }} arquivo(s)</span>
+  </div>
+
+  <form method="get" class="media-toolbar">
+    <div class="media-toolbar-left">
+      <select name="tipo">
+        <option value="all" {% if tipo == 'all' %}selected{% endif %}>Todas as mídias</option>
+        <option value="image" {% if tipo == 'image' %}selected{% endif %}>Imagens</option>
+        <option value="audio" {% if tipo == 'audio' %}selected{% endif %}>Áudios</option>
+        <option value="video" {% if tipo == 'video' %}selected{% endif %}>Vídeos</option>
+        <option value="document" {% if tipo == 'document' %}selected{% endif %}>Documentos</option>
+      </select>
+      <select name="data">
+        <option value="all" {% if data == 'all' %}selected{% endif %}>Todas as datas</option>
+        <option value="today" {% if data == 'today' %}selected{% endif %}>Hoje</option>
+        <option value="7d" {% if data == '7d' %}selected{% endif %}>Últimos 7 dias</option>
+        <option value="30d" {% if data == '30d' %}selected{% endif %}>Últimos 30 dias</option>
+        <option value="year" {% if data == 'year' %}selected{% endif %}>Este ano</option>
+      </select>
+      <button type="submit" class="media-bulk-btn">Aplicar filtros</button>
+    </div>
+    <div class="media-toolbar-right">
+      <label for="media-search">Pesquisar</label>
+      <input id="media-search" type="search" name="q" value="{{ q }}" placeholder="Nome do arquivo">
+    </div>
+  </form>
+
+  {% if media_items %}
+    <div class="media-grid">
+      {% for media in media_items %}
+        <article class="media-card">
+          <a href="{{ media.url }}" target="_blank" rel="noreferrer" class="media-thumb-link">
+            {% if media.is_image %}
+              <img src="{{ media.url }}" alt="{{ media.name }}" class="media-thumb">
+            {% else %}
+              <div class="media-file-placeholder">
+                <span class="media-file-icon">♪</span>
+                <small>{{ media.type|title }}</small>
+              </div>
+            {% endif %}
+          </a>
+          <div class="media-info">
+            <p class="media-name" title="{{ media.name }}">{{ media.name }}</p>
+            <a href="{{ media.url }}" target="_blank" rel="noreferrer" class="media-url">{{ media.url }}</a>
+            <small class="media-date">{{ media.modified_at|date:'d/m/Y H:i' }}</small>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>Nenhuma mídia encontrada.</p>
+  {% endif %}
+</section>
+{% endblock %}

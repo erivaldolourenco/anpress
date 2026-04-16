@@ -1,0 +1,15 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Excluir post{% endblock %}
+
+{% block content %}
+<section class="card">
+  <h1>Excluir post</h1>
+  <p>Confirma a exclusão de <strong>{{ object.title }}</strong>?</p>
+  <form method="post" class="actions">
+    {% csrf_token %}
+    <button type="submit">Sim, excluir</button>
+    <a href="{% url 'dashboard:post_list' %}">Cancelar</a>
+  </form>
+</section>
+{% endblock %}

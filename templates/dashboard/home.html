@@ -1,0 +1,37 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Início{% endblock %}
+
+{% block content %}
+<section class="grid metrics">
+  <article class="card metric-card">
+    <h2>Posts</h2>
+    <p class="metric-value">{{ post_count }}</p>
+    <small>{{ published_post_count }} publicados</small>
+  </article>
+  <article class="card metric-card">
+    <h2>Páginas</h2>
+    <p class="metric-value">{{ page_count }}</p>
+    <small>{{ published_page_count }} publicadas</small>
+  </article>
+  <article class="card metric-card">
+    <h2>Usuários</h2>
+    <p class="metric-value">{{ user_count }}</p>
+    <small>cadastros totais</small>
+  </article>
+</section>
+
+<section class="card">
+  <h2>Posts recentes</h2>
+  <ul class="simple-list">
+    {% for post in recent_posts %}
+      <li>
+        <strong>{{ post.title }}</strong>
+        <small>{{ post.get_status_display }} • {{ post.author }}</small>
+      </li>
+    {% empty %}
+      <li>Nenhum post cadastrado.</li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}

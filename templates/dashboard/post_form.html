@@ -1,0 +1,69 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}{% if object %}Editar post{% else %}Novo post{% endif %}{% endblock %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data" class="editor-layout">
+  {% csrf_token %}
+
+  <section class="panel editor-main">
+    <div class="panel-header">
+      <h1>{% if object %}Editar post{% else %}Novo post{% endif %}</h1>
+      <p>Última atualização: {% if object %}{{ object.updated_at|date:'d/m/Y H:i' }}{% else %}agora{% endif %}</p>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-field">
+        {{ form.title.label_tag }}
+        {{ form.title }}
+        {{ form.title.errors }}
+      </div>
+      <div class="form-field">
+        {{ form.slug.label_tag }}
+        {{ form.slug }}
+        {{ form.slug.errors }}
+      </div>
+      <div class="form-field full">
+        {{ form.summary.label_tag }}
+        {{ form.summary }}
+        {{ form.summary.errors }}
+      </div>
+      <div class="form-field full">
+        {{ form.content.label_tag }}
+        {{ form.content }}
+        {{ form.content.errors }}
+      </div>
+    </div>
+  </section>
+
+  <aside class="panel editor-side">
+    <h2>Appearance</h2>
+
+    <div class="form-field">
+      {{ form.status.label_tag }}
+      {{ form.status }}
+    </div>
+    <div class="form-field">
+      {{ form.published_at.label_tag }}
+      {{ form.published_at }}
+    </div>
+    <div class="form-field">
+      {{ form.featured_image.label_tag }}
+      {{ form.featured_image }}
+    </div>
+    <div class="form-field">
+      {{ form.meta_title.label_tag }}
+      {{ form.meta_title }}
+    </div>
+    <div class="form-field">
+      {{ form.meta_description.label_tag }}
+      {{ form.meta_description }}
+    </div>
+
+    <div class="actions sticky-actions">
+      <button type="submit" class="primary-btn">Update</button>
+      <a href="{% url 'dashboard:post_list' %}">Cancelar</a>
+    </div>
+  </aside>
+</form>
+{% endblock %}
